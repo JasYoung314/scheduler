@@ -1,0 +1,37 @@
+\documentclass{article}
+
+\begin{document}
+
+Let $T$ be the set of all tutors.
+
+Let $T_1$ be the set of tutors taking 2 hours of tutorials.
+
+Let $T_2$ be the set of tutors taking 6 hours of tutorials.
+
+Let $S$ be the set of all tutorial slots.
+
+Let $K$ be the set of all time slots.
+
+Let $S_k$ be the set of all time slots that take place at time $k$.
+
+Let $a_{ij}$ denote that tutor $i$ is available to take tutorial $j$. $a_{ij}$ is 1 if the tutor is available and $m$ if the tutor is not available, where $m$ is a sufficiently large number.
+
+Let $x_{ij}$ be the decision variable which denotes that tutor $i$ is taking $j$. $x_{ij}$ is a binary variable.
+
+$$ \max \sum_{i \in T, j \in S} x_{ij} $$
+
+subject to 
+
+$$ \forall i \in T_1 \sum_{j \in S} a_{ij}x_{ij} = 2$$
+
+$$ \forall i \in T_2 \sum_{j \in S} a_{ij}x_{ij} = 6$$
+
+$$ \forall j \in S \sum_{i \in T} x_{ij} = 2$$
+
+$$ \forall i \in T , \: \forall k \in K \sum_{j \in S_{k}} x_{ij} \leq 1$$
+
+$$ x_{ij} \in \{0,1\}$$
+
+$$ a_{ij} \in \{1,m\}$$
+
+\end{document}
