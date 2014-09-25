@@ -3,7 +3,7 @@ import csv
 import glob
 import random
 
-files = [file for file in glob.glob('available2.csv')]
+files = [file for file in glob.glob('available3.csv')]
 
 for fle in files:
     #reads in data files
@@ -19,7 +19,8 @@ for fle in files:
 
     #Stores the names under a key and breaks them up by tutoring hours
     tutornames = ['jt','dafydd','paul','vince','jason','rhyd','james','hawa','long','carney','power','daisy','staden','lunn','pohl','thomson','awan']
-    t1 = ['jt','dafydd','paul','rhyd','james','hawa','long','carney','power','daisy','staden','lunn','pohl','thomson','awan']
+    tutornames = ['jt','dafydd','paul','vince','jason','rhyd','james','hawa','long','carney','power','morgan','daisy','staden','lunn','pohl','thomson','awan']
+    t1 = ['jt','dafydd','paul','rhyd','james','hawa','long','carney','power','morgan','daisy','staden','lunn','pohl','thomson','awan']
     t2 = ['vince','jason']
     tdict = {}
     for i in range(len(tutornames)):
@@ -63,5 +64,15 @@ for fle in files:
         if not tutornames[i[0]] in schedule and v == 1:
             schedule[tutornames[i[0]]] = [slotnames[i[1]]]  
     
-    for e in schedule:
-        print e,schedule[e]
+#    for e in schedule:
+#        print e, schedule[e]
+    used = []
+    notused = []
+    for slot in slotnames:
+        print slot
+        for e in schedule:
+            if slot in schedule[e]:
+                print '\t %s' % e
+                used.append(e)
+    notused = [e for e in tutornames if e not in used]
+    print 'Students not used: %s' % notused
