@@ -4,31 +4,31 @@ _sage_const_2 = Integer(2); _sage_const_20 = Integer(20); _sage_const_0 = Intege
 import os
 import csv
 import glob
-import matplotlib
 import random
 
-files = [file for file in glob.glob('available.csv')]
+files = [file for file in glob.glob('available2.csv')]
 
 for fle in files:
+    #reads in data files
     f=open(fle,'r') 
     data = [[int(j) for j in row] for row in csv.reader(f)] 
     f.close() 
-#    data = [[0 for e in range(20)] for e in range(20)]
     for e in range(len(data)):
         for i in range(len(data[e])):
             if data[e][i] == _sage_const_0 :
                 data[e][i] = _sage_const_20 
-
+    #data = [[1 for e in range(20)] for i in range(17)]
     M = Matrix(data)
 
-    
-    tutornames = ['jt','dafydd','paul','vince','jason','james','hawa','long','carney','power','daisy','staden','lunn','pohl','thomson','awan']
-    t1 = ['jt','dafydd','paul','james','hawa','long','carney','power','daisy','staden','lunn','pohl','thomson','awan']
+    #Stores the names under a key and breaks them up by tutoring hours
+    tutornames = ['jt','dafydd','paul','vince','jason','rhyd','james','hawa','long','carney','power','daisy','staden','lunn','pohl','thomson','awan']
+    t1 = ['jt','dafydd','paul','rhyd','james','hawa','long','carney','power','daisy','staden','lunn','pohl','thomson','awan']
     t2 = ['vince','jason']
     tdict = {}
     for i in range(len(tutornames)):
         tdict[tutornames[i]] = i
     
+    #Stores the tutorials under a key and breaks them up by time slot
     slotnames = ['s1','x1','t1','y1','p1','u1','r1','w1','v1','z1','s2','x2','t2','y2','p2','u2','r2','w2','v2','z2']
     sk = [['s1','x1'],['t1','y1'],['p1','u1'],['r1','w1'],['v1','z1'],['s2','x2'],['t2','y2'],['p2','u2'],['r2','w2'],['v2','z2']]
     sdict = {}
@@ -38,22 +38,26 @@ for fle in files:
     slots = len(slotnames) 
     Tutors = len(tutornames)
 
+    #initialises the MLP
     p = MixedIntegerLinearProgram()  
     w = p.new_variable(binary=True)
     
+    #sets the objective function
     p.set_objective(sum(w[(i,j)] for i in range(Tutors) for j in range(slots)))
 
+    #adds the constraints described in the documentation
     for i in t1:
-        p.add_constraint(sum( M[(tdict[i],j)]*w[(tdict[i],j)] for j in range(slots)) == _sage_const_2 )
+        p.add_constraint(sum( M[(tdict[i],j)]*w[(tdict[i],j)] for j in range(slots)) <= _sage_const_2 )
     for i in t2:
-        p.add_constraint(sum( M[(tdict[i],j)]*w[(tdict[i],j)] for j in range(slots)) == _sage_const_6 )
+        p.add_constraint(sum( M[(tdict[i],j)]*w[(tdict[i],j)] for j in range(slots)) <=_sage_const_6  )
 
     for j in range(slots):
         p.add_constraint(sum( w[(i,j)] for i in range(Tutors)) == _sage_const_2 )
     for i in tutornames:
         for k in sk:
             p.add_constraint(sum( w[(tdict[i],sdict[k2])] for k2 in k) <= _sage_const_1 )
-        
+    
+    #converts the keys to the names of the tutors and tutorials
     schedule = {}
     print 'Objective Value:', p.solve()
     for i, v in p.get_values(w).iteritems():

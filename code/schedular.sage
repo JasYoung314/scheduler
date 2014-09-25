@@ -3,7 +3,7 @@ import csv
 import glob
 import random
 
-files = [file for file in glob.glob('available.csv')]
+files = [file for file in glob.glob('available2.csv')]
 
 for fle in files:
     #reads in data files
@@ -14,11 +14,12 @@ for fle in files:
         for i in range(len(data[e])):
             if data[e][i] == 0:
                 data[e][i] = 20
+    #data = [[1 for e in range(20)] for i in range(17)]
     M = Matrix(data)
 
     #Stores the names under a key and breaks them up by tutoring hours
-    tutornames = ['jt','dafydd','paul','vince','jason','james','hawa','long','carney','power','daisy','staden','lunn','pohl','thomson','awan']
-    t1 = ['jt','dafydd','paul','james','hawa','long','carney','power','daisy','staden','lunn','pohl','thomson','awan']
+    tutornames = ['jt','dafydd','paul','vince','jason','rhyd','james','hawa','long','carney','power','daisy','staden','lunn','pohl','thomson','awan']
+    t1 = ['jt','dafydd','paul','rhyd','james','hawa','long','carney','power','daisy','staden','lunn','pohl','thomson','awan']
     t2 = ['vince','jason']
     tdict = {}
     for i in range(len(tutornames)):
@@ -43,9 +44,9 @@ for fle in files:
 
     #adds the constraints described in the documentation
     for i in t1:
-        p.add_constraint(sum( M[(tdict[i],j)]*w[(tdict[i],j)] for j in range(slots)) == 2)
+        p.add_constraint(sum( M[(tdict[i],j)]*w[(tdict[i],j)] for j in range(slots)) <= 2)
     for i in t2:
-        p.add_constraint(sum( M[(tdict[i],j)]*w[(tdict[i],j)] for j in range(slots)) == 6)
+        p.add_constraint(sum( M[(tdict[i],j)]*w[(tdict[i],j)] for j in range(slots)) <=6 )
 
     for j in range(slots):
         p.add_constraint(sum( w[(i,j)] for i in range(Tutors)) == 2)
