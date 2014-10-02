@@ -7,7 +7,7 @@ def schedule():
     '''
     Short script to schedule tutorials for tutors. Takes in a csv of availabilty, names must be entered into the lists, as well as the tutoring slots
     The output must be less than 40 man hours of tutoring in total.
-    >>> schedule()
+    sage: schedule()
     True
     '''
 
